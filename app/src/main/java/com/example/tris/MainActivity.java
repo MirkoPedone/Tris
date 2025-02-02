@@ -26,33 +26,40 @@ public class MainActivity extends AppCompatActivity {
 
     //Instantiate-Start----------------------------------------------------------------------------
 
-    //Objects-------------------------------------------
+    //Init-TextViews------------------------------------
     private TextView txtV1Round, txtV2Round, txtV_win, txtV_xScore, txtV_oScore;
     private TextView txtV_title, txtV_title2, txtV_by, txtV_language, txtV_color, txtV_resetScore;
+
+    //Init-Buttons--------------------------------------
     private Button btn1A, btn2A, btn3A, btn1B, btn2B, btn3B, btn1C, btn2C, btn3C;
     private Button btn_playAgain, btn_resetScore, btn_resetNo, btn_resetYes, btn_settings;
     private Button btn_languageIT, btn_languageEN;
     private Button btn_color_greens, btn_color_lightBlueSand, btn_color_greyYellow;
+
+    //Init-ImageViews-----------------------------------
     private ImageView img_x_a1, img_x_a2, img_x_a3, img_x_b1, img_x_b2, img_x_b3, img_x_c1, img_x_c2, img_x_c3;
     private ImageView img_lines;
+
+    //Init-LinearLayout---------------------------------
     private LinearLayout linearL_resetScore, linearL_settings;
 
-    //Variables-------------------------------------------
+    //Init-Booleans-------------------------------------
     private boolean isPlayerOneTurn = true;
-    private int turns = 0;
+    private boolean isPlayEnd, isPlayWin, isSettingsLinearLayoutShow, isItalianSelected, isLastWinner1 = false;
+
+    //Init-Ints-----------------------------------------
     private int[][] x_o_matrix = {
         {0, 0, 0},
         {0, 0, 0},
         {0, 0, 0}
     };
-    private boolean isPlayEnd = false;
-    private boolean isPlayWin = false;
-    private int xScore = 0;
-    private int oScore = 0;
-    private boolean isSettingsLinearLayoutShow = false;
-    private boolean isItalianSelected = false;
-    private boolean isLastWinner1 = false;
+    private int turns, xScore, oScore = 0;
+
+    //Init-Strings--------------------------------------
     private String colorSetName = "";
+
+    //Init-SharedPreferences----------------------------
+    private SharedPreferences prefs;
 
     //Instantiate-End------------------------------------------------------------------------------
 
@@ -66,11 +73,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //TextViews-------------------------------------
-        txtV1Round  = findViewById(R.id.txtV_1round);
-        txtV2Round  = findViewById(R.id.txtV_2round);
-        txtV_win    = findViewById(R.id.txtV_win);
-        txtV_xScore = findViewById(R.id.txtV_xScore);
-        txtV_oScore = findViewById(R.id.txtV_oScore);
+        txtV1Round      = findViewById(R.id.txtV_1round);
+        txtV2Round      = findViewById(R.id.txtV_2round);
+        txtV_win        = findViewById(R.id.txtV_win);
+        txtV_xScore     = findViewById(R.id.txtV_xScore);
+        txtV_oScore     = findViewById(R.id.txtV_oScore);
         txtV_title      = findViewById(R.id.txtV_title);
         txtV_title2     = findViewById(R.id.txtV_title2);
         txtV_by         = findViewById(R.id.txtV_by);
@@ -79,36 +86,36 @@ public class MainActivity extends AppCompatActivity {
         txtV_resetScore = findViewById(R.id.txtV_resetScore);
 
         //Buttons---------------------------------------
-        btn1A = findViewById(R.id.btn_1A);
-        btn2A = findViewById(R.id.btn_2A);
-        btn3A = findViewById(R.id.btn_3A);
-        btn1B = findViewById(R.id.btn_1B);
-        btn2B = findViewById(R.id.btn_2B);
-        btn3B = findViewById(R.id.btn_3B);
-        btn1C = findViewById(R.id.btn_1C);
-        btn2C = findViewById(R.id.btn_2C);
-        btn3C = findViewById(R.id.btn_3C);
-        btn_playAgain  = findViewById(R.id.btn_playAgain);
-        btn_resetScore = findViewById(R.id.btn_resetScore);
-        btn_resetNo    = findViewById(R.id.btn_resetNo);
-        btn_resetYes   = findViewById(R.id.btn_resetYes);
-        btn_settings   = findViewById(R.id.btn_settings);
-        btn_languageIT   = findViewById(R.id.btn_languageIT);
-        btn_languageEN    = findViewById(R.id.btn_languageEN);
-        btn_color_greens  = findViewById(R.id.btn_color_greens);
+        btn1A                   = findViewById(R.id.btn_1A);
+        btn2A                   = findViewById(R.id.btn_2A);
+        btn3A                   = findViewById(R.id.btn_3A);
+        btn1B                   = findViewById(R.id.btn_1B);
+        btn2B                   = findViewById(R.id.btn_2B);
+        btn3B                   = findViewById(R.id.btn_3B);
+        btn1C                   = findViewById(R.id.btn_1C);
+        btn2C                   = findViewById(R.id.btn_2C);
+        btn3C                   = findViewById(R.id.btn_3C);
+        btn_playAgain           = findViewById(R.id.btn_playAgain);
+        btn_resetScore          = findViewById(R.id.btn_resetScore);
+        btn_resetNo             = findViewById(R.id.btn_resetNo);
+        btn_resetYes            = findViewById(R.id.btn_resetYes);
+        btn_settings            = findViewById(R.id.btn_settings);
+        btn_languageIT          = findViewById(R.id.btn_languageIT);
+        btn_languageEN          = findViewById(R.id.btn_languageEN);
+        btn_color_greens        = findViewById(R.id.btn_color_greens);
         btn_color_lightBlueSand = findViewById(R.id.btn_color_lightBlueSand);
         btn_color_greyYellow    = findViewById(R.id.btn_color_greyYellow);
 
         //Images----------------------------------------
-        img_x_a1 = findViewById(R.id.img_x_a1);
-        img_x_a2 = findViewById(R.id.img_x_a2);
-        img_x_a3 = findViewById(R.id.img_x_a3);
-        img_x_b1 = findViewById(R.id.img_x_b1);
-        img_x_b2 = findViewById(R.id.img_x_b2);
-        img_x_b3 = findViewById(R.id.img_x_b3);
-        img_x_c1 = findViewById(R.id.img_x_c1);
-        img_x_c2 = findViewById(R.id.img_x_c2);
-        img_x_c3 = findViewById(R.id.img_x_c3);
+        img_x_a1  = findViewById(R.id.img_x_a1);
+        img_x_a2  = findViewById(R.id.img_x_a2);
+        img_x_a3  = findViewById(R.id.img_x_a3);
+        img_x_b1  = findViewById(R.id.img_x_b1);
+        img_x_b2  = findViewById(R.id.img_x_b2);
+        img_x_b3  = findViewById(R.id.img_x_b3);
+        img_x_c1  = findViewById(R.id.img_x_c1);
+        img_x_c2  = findViewById(R.id.img_x_c2);
+        img_x_c3  = findViewById(R.id.img_x_c3);
         img_lines = findViewById(R.id.img_lines);
 
         //LinearLayout----------------------------------
@@ -282,10 +289,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Get-Variable-Value-----------------------------------------------------------------------
-        SharedPreferences prefs = getSharedPreferences("game_prefs", MODE_PRIVATE);
+        //Get-VariableValue------------------------------------------------------------------------
+        getVariableValue();
+    }
+    //OnCreate-End---------------------------------------------------------------------------------
 
-        //Set-Language----------------------------------
+    //Methods-Start--------------------------------------------------------------------------------
+
+    //GetVariableValue-PrefsValue-Start-----------------
+    private void getVariableValue() {
+
+        //GetPrefs--------------------------------------
+        prefs = getSharedPreferences("game_prefs", MODE_PRIVATE);
+
+        //Get-Language-PrefsValue-----------------------
         isItalianSelected = prefs.getBoolean("isItalianSelected", false);
         if (isItalianSelected) {
             setItalianLanguage();
@@ -294,9 +311,9 @@ public class MainActivity extends AppCompatActivity {
         }
         xScore = prefs.getInt("xScore", 0);
         oScore = prefs.getInt("oScore", 0);
-        colorSetName = prefs.getString("colorSetName", "");
 
-        //Set-BackgroundColor---------------------------
+        //Get-BackgroundColor-PrefsValue----------------
+        colorSetName = prefs.getString("colorSetName", "green");
         if (colorSetName.equals("green"))
             btn_color_greens.performClick();
         else if (colorSetName.equals("sand"))
@@ -304,31 +321,27 @@ public class MainActivity extends AppCompatActivity {
         else if (colorSetName.equals("yellow"))
             btn_color_greyYellow.performClick();
 
-        //Set-PlayersScore------------------------------
+        //Get-PlayersScore-PrefsValue-------------------
         txtV_xScore.setText("X: " + xScore);
         txtV_oScore.setText("O: " + oScore);
 
-        //Set-Button-ResetScore-Visibility--------------
+        //Get-Button-ResetScore-Visibility-PrefsValue---
         if (xScore + oScore > 0)
             btn_resetScore.setAlpha(1f);
         else
             btn_resetScore.setAlpha(0.5f);
     }
-    //OnCreate-End---------------------------------------------------------------------------------
-
-    //Methods-Start--------------------------------------------------------------------------------
+    //GetVariableValue-PrefsValue-End-------------------
 
     //SetItalianLanguage-Start--------------------------
     private void setItalianLanguage() {
+
+        //TextViews-------------------------------------
         txtV_title2.setText("X contro O");
         txtV_by.setText("Creato da ImMirko");
-        txtV_language.setText("Lingue"); // modificare spazio scritta
+        txtV_language.setText("Lingue");
         txtV_color.setText("Colori");
         txtV_resetScore.setText("Azzerare Punteggio?");
-        btn_resetNo.setText("No");
-        btn_resetYes.setText("Sì");
-        // da cambiare in metodo di stampa vittoria && gameResult_tie
-        btn_playAgain.setText("Rigioca");
         txtV1Round.setText("Giocatore X");
         txtV2Round.setText("Giocatore O");
 
@@ -344,8 +357,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        //Buttons---------------------------------------
+        btn_resetNo.setText("No");
+        btn_resetYes.setText("Sì");
+        btn_playAgain.setText("Rigioca");
+
+        //Booleans---------------------------------------
         isItalianSelected = true;
-        SharedPreferences prefs = getSharedPreferences("game_prefs", MODE_PRIVATE);
+
+        //Update-IsItalianSelected-PrefsValue-----------
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("isItalianSelected", true);
         editor.apply();
@@ -354,14 +374,13 @@ public class MainActivity extends AppCompatActivity {
 
     //SetEnglishLanguage-Start--------------------------
     private void setEnglishLanguage() {
+
+        //TextViews-------------------------------------
         txtV_title2.setText("X vs O");
         txtV_by.setText("Made by ImMirko");
-        txtV_language.setText("Language"); // change left space
+        txtV_language.setText("Language");
         txtV_color.setText("Colour");
         txtV_resetScore.setText("Reset Score?");
-        btn_resetNo.setText("No");
-        btn_resetYes.setText("Yes");
-        btn_playAgain.setText("Play Again");
         txtV1Round.setText("Player X's turn");
         txtV2Round.setText("Player O's turn");
 
@@ -376,8 +395,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        //Buttons---------------------------------------
+        btn_resetNo.setText("No");
+        btn_resetYes.setText("Yes");
+        btn_playAgain.setText("Play Again");
+
+        //Booleans---------------------------------------
         isItalianSelected = false;
-        SharedPreferences prefs = getSharedPreferences("game_prefs", MODE_PRIVATE);
+
+        //Update-IsItalianSelected-PrefsValue-----------
         SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean("isItalianSelected", false);
         editor.apply();
@@ -387,13 +413,18 @@ public class MainActivity extends AppCompatActivity {
     //SetColor-Start------------------------------------
     private void setColor(String darkColor, String midColor, String lightColor, String colorSet) {
 
-        SharedPreferences prefs = getSharedPreferences("game_prefs", MODE_PRIVATE);
+        //Update-ColorSetName-PrefsValue----------------
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("colorSetName", colorSet);
         editor.apply();
 
-        //Images----------------------------------------
+        //Update-ColorSetName-Value---------------------
+        colorSetName = colorSet;
+
+        //Set-ColorFilter-------------------------------
         ColorFilter colorFilterLight = new PorterDuffColorFilter(Color.parseColor(lightColor), PorterDuff.Mode.SRC_ATOP);
+
+        //Images----------------------------------------
         img_lines.setColorFilter(colorFilterLight);
         img_x_a1.setColorFilter(colorFilterLight);
         img_x_a2.setColorFilter(colorFilterLight);
@@ -408,14 +439,20 @@ public class MainActivity extends AppCompatActivity {
         //TextViews-------------------------------------
         txtV_title.setTextColor(Color.parseColor(lightColor));
         txtV_title2.setTextColor(Color.parseColor(lightColor));
+
         txtV_xScore.setTextColor(Color.parseColor(lightColor));
         txtV_oScore.setTextColor(Color.parseColor(lightColor));
+
         txtV_by.setTextColor(Color.parseColor(lightColor));
+
         txtV1Round.setTextColor(Color.parseColor(lightColor));
         txtV2Round.setTextColor(Color.parseColor(lightColor));
+
         txtV_resetScore.setTextColor(Color.parseColor(darkColor));
+
         txtV_language.setTextColor(Color.parseColor(darkColor));
         txtV_color.setTextColor(Color.parseColor(darkColor));
+
         txtV_win.setTextColor(Color.parseColor(lightColor));
 
         //LinearLayouts---------------------------------
@@ -434,11 +471,6 @@ public class MainActivity extends AppCompatActivity {
         btn_playAgain.setTextColor(Color.parseColor(darkColor));
         btn_playAgain.setBackgroundColor(Color.parseColor(lightColor));
 
-        btn_resetNo.setTextColor(Color.parseColor(darkColor));
-        btn_resetYes.setTextColor(Color.parseColor(darkColor));
-        btn_resetYes.setBackgroundColor(Color.parseColor(midColor));
-        btn_resetNo.setBackgroundColor(Color.parseColor(midColor));
-
         btn_languageIT.setBackgroundColor(Color.parseColor(lightColor));
         btn_languageEN.setBackgroundColor(Color.parseColor(lightColor));
 
@@ -453,6 +485,11 @@ public class MainActivity extends AppCompatActivity {
             drawableLeftResetScoreBtn.setColorFilter(new PorterDuffColorFilter(Color.parseColor(darkColor), PorterDuff.Mode.SRC_ATOP));
             btn_resetScore.setCompoundDrawablesWithIntrinsicBounds(drawableLeftResetScoreBtn, drawablesResetScoreBtn[1], drawablesResetScoreBtn[2], drawablesResetScoreBtn[3]);
         }
+        btn_resetNo.setTextColor(Color.parseColor(darkColor));
+        btn_resetYes.setTextColor(Color.parseColor(darkColor));
+        btn_resetYes.setBackgroundColor(Color.parseColor(midColor));
+        btn_resetNo.setBackgroundColor(Color.parseColor(midColor));
+
         btn_settings.setBackgroundColor(Color.parseColor(lightColor));
         Drawable[] drawablesSettingsBtn = btn_settings.getCompoundDrawables();
         Drawable drawableLeftSettingsBtn = drawablesSettingsBtn[0];
@@ -583,7 +620,6 @@ public class MainActivity extends AppCompatActivity {
 
     //SaveScore-Start-----------------------------------
     private void saveScores() {
-        SharedPreferences prefs = getSharedPreferences("game_prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("xScore", xScore);
         editor.putInt("oScore", oScore);
@@ -594,13 +630,16 @@ public class MainActivity extends AppCompatActivity {
     //GameResult-Tie-Start------------------------------
     private void gameResult_tie() {
         isPlayEnd = true;
+
         txtV_win.setVisibility(View.VISIBLE);
+        txtV1Round.setVisibility(View.INVISIBLE);
+        txtV2Round.setVisibility(View.INVISIBLE);
+
         if (isItalianSelected)
             txtV_win.setText("Pareggio!");
         else
             txtV_win.setText("It's a draw!");
-        txtV1Round.setVisibility(View.INVISIBLE);
-        txtV2Round.setVisibility(View.INVISIBLE);
+
         askToPlayAgain();
     }
     //GameResult-Tie-End--------------------------------
@@ -628,16 +667,22 @@ public class MainActivity extends AppCompatActivity {
 
     //PlayAgain-Start----------------------------------
     private void playAgain() {
+
+        //Int-------------------------------------------
         turns = 0;
+
+        //Booleans--------------------------------------
         isPlayEnd = false;
         isPlayWin = false;
         isPlayerOneTurn = true;
 
+        //TextViews-------------------------------------
         txtV1Round.setVisibility(View.VISIBLE);
         txtV2Round.setVisibility(View.INVISIBLE);
-        btn_playAgain.setVisibility(View.INVISIBLE);
         txtV_win.setVisibility(View.INVISIBLE);
 
+        //Buttons---------------------------------------
+        btn_playAgain.setVisibility(View.INVISIBLE);
         btn1A.setVisibility(View.VISIBLE);
         btn2A.setVisibility(View.VISIBLE);
         btn3A.setVisibility(View.VISIBLE);
@@ -648,6 +693,7 @@ public class MainActivity extends AppCompatActivity {
         btn2C.setVisibility(View.VISIBLE);
         btn3C.setVisibility(View.VISIBLE);
 
+        //Images----------------------------------------
         img_x_a1.setVisibility(View.INVISIBLE);
         img_x_a2.setVisibility(View.INVISIBLE);
         img_x_a3.setVisibility(View.INVISIBLE);
@@ -658,11 +704,14 @@ public class MainActivity extends AppCompatActivity {
         img_x_c2.setVisibility(View.INVISIBLE);
         img_x_c3.setVisibility(View.INVISIBLE);
 
+        //Matrix----------------------------------------
         x_o_matrix = new int[][]{
             {0, 0, 0},
             {0, 0, 0},
             {0, 0, 0}
         };
+
+        //Redefine-ButtonsListener-Start----------------
 
         //Button-1A-------------------------------------
         btn1A.setOnClickListener(new View.OnClickListener() {
@@ -743,6 +792,8 @@ public class MainActivity extends AppCompatActivity {
                 playAgain();
             }
         });
+
+        //Redefine-ButtonsListener-End------------------
     }
     //PlayAgain-End------------------------------------
 
@@ -775,73 +826,81 @@ public class MainActivity extends AppCompatActivity {
 
     //ResetScore-Start----------------------------------
     private void resetScore() {
+
+        //Ints------------------------------------------
         xScore = 0;
         oScore = 0;
-        SharedPreferences prefs = getSharedPreferences("game_prefs", MODE_PRIVATE);
+
+        //TextViews-------------------------------------
+        txtV_xScore.setText("X: 0");
+        txtV_oScore.setText("O: 0");
+
+        //LinearLayout----------------------------------
+        linearL_resetScore.setVisibility(View.INVISIBLE);
+
+        //Buttons---------------------------------------
+        btn_resetScore.setEnabled(true);
+        btn_resetScore.setAlpha(0.5f);
+        btn_settings.setEnabled(true);
+        btn_settings.setAlpha(1f);
+        btn_playAgain.setVisibility(View.INVISIBLE);
+
+        //Update-xScore-&-oScore-PrefsValue-------------
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("xScore", 0);
         editor.putInt("oScore", 0);
         editor.apply();
 
-        txtV_xScore.setText("X: 0");
-        txtV_oScore.setText("O: 0");
-
-        linearL_resetScore.setVisibility(View.INVISIBLE);
-
-        btn_resetScore.setEnabled(true);
-        btn_resetScore.setAlpha(0.5f);
-        btn_settings.setEnabled(true);
-        btn_settings.setAlpha(1f);
-
-        btn_playAgain.setVisibility(View.INVISIBLE);
         playAgain();
     }
     //ResetScore-End------------------------------------
 
-    //ShowSettingsLinearLayout-Start---------------
+    //ShowSettingsLinearLayout-Start--------------------
     private void showSettingsLinearLayout() {
+
+        //Force-Settings-LinearLayout-Update------------
         if (colorSetName.equals("green")) {
             btn_color_lightBlueSand.performClick();
             btn_color_greens.performClick();
-            SharedPreferences prefs = getSharedPreferences("game_prefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(colorSetName, "green");
-            editor.apply();
         }
         else if (colorSetName.equals("sand")) {
             btn_color_greens.performClick();
             btn_color_lightBlueSand.performClick();
-            SharedPreferences prefs = getSharedPreferences("game_prefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(colorSetName, "sand");
-            editor.apply();
         }
         else if (colorSetName.equals("yellow")){
             btn_color_greens.performClick();
             btn_color_greyYellow.performClick();
-            SharedPreferences prefs = getSharedPreferences("game_prefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(colorSetName, "yellow");
-            editor.apply();
         }
+
+        //LinearLayout----------------------------------
         linearL_settings.setVisibility(View.VISIBLE);
+
+        //Buttons---------------------------------------
         btn_resetScore.setEnabled(false);
         btn_resetScore.setAlpha(0.5f);
+
+        //Boolean---------------------------------------
         isSettingsLinearLayoutShow = true;
     }
-    //ShowSettingsLinearLayout-End-----------------
+    //ShowSettingsLinearLayout-End----------------------
 
-    //HideSettingsLinearLayout-Start---------------
+    //HideSettingsLinearLayout-Start--------------------
     private void hideSettingsLinearLayout() {
+
+        //LinearLayout----------------------------------
         linearL_settings.setVisibility(View.INVISIBLE);
+
+        //Buttons---------------------------------------
         btn_resetScore.setEnabled(true);
         if (xScore + oScore > 0)
             btn_resetScore.setAlpha(1f);
         else
             btn_resetScore.setAlpha(0.5f);
+
+        //Boolean---------------------------------------
         isSettingsLinearLayoutShow = false;
     }
-    //HideSettingsLinearLayout-End-----------------
+    //HideSettingsLinearLayout-End----------------------
 
     //Methods-End--------------------------------------------------------------------------------
 
